@@ -1,0 +1,13 @@
+package com.vdggrtf.playlog.domain.usecase.splash
+
+import com.vdggrtf.playlog.domain.repository.AuthRepository
+
+// This UseCase is strictly bound to domain logic, no 3rd-party dependencies!
+class CheckUserSessionUseCase (
+    private val repository: AuthRepository
+) {
+
+    suspend operator fun invoke(): Boolean{
+        return repository.isUserSessionActive()
+    }
+}
