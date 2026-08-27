@@ -1,18 +1,15 @@
 package com.vdggrtf.playlog.presentation.main.recommendation.playlists
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vdggrtf.playlog.domain.model.GameModel
 import com.vdggrtf.playlog.domain.usecase.main.playlist.ObservePlaylistGamesUseCase
 import com.vdggrtf.playlog.domain.usecase.main.playlist.RemoveGameFromPlaylistUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class PlaylistDetailsState(
     val isLoading: Boolean = false,
@@ -20,8 +17,7 @@ data class PlaylistDetailsState(
     val games: List<GameModel> = emptyList(),
 )
 
-@HiltViewModel
-class PlaylistDetailsViewModel @Inject constructor(
+class PlaylistDetailsViewModel (
     savedStateHandle: SavedStateHandle,
     private val observePlaylistGamesUseCase: ObservePlaylistGamesUseCase,
     private val removeGameFromPlaylistUseCase: RemoveGameFromPlaylistUseCase
@@ -56,8 +52,8 @@ class PlaylistDetailsViewModel @Inject constructor(
         if (currentPlaylistId.isBlank()) return
         viewModelScope.launch {
             removeGameFromPlaylistUseCase(currentPlaylistId, gameId).fold(
-                onSuccess = { Log.d("Playlist", "Game Removed!") }, // Flow сам обновит UI!
-                onFailure = { Log.e("Playlist", "Error removing game: ${it.message}") }
+                onSuccess = { println("Playlist Game Removed!") }, // Flow сам обновит UI!
+                onFailure = { println("Playlist Error removing game: ${it.message}") }
             )
         }
     }

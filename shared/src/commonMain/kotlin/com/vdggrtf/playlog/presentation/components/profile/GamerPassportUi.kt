@@ -28,18 +28,29 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vdggrtf.playlog.R
 import com.vdggrtf.playlog.ui.theme.AiAccent
 import com.vdggrtf.playlog.ui.theme.Background
 import com.vdggrtf.playlog.ui.theme.CardBackground
 import com.vdggrtf.playlog.ui.theme.PrimaryPurple
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import playlog.shared.generated.resources.Res.drawable
+import playlog.shared.generated.resources.Res.string
+import playlog.shared.generated.resources._100_completed
+import playlog.shared.generated.resources.authenticated
+import playlog.shared.generated.resources.games_in_library
+import playlog.shared.generated.resources.mythical_trophies
+import playlog.shared.generated.resources.peak_difficulty
+import playlog.shared.generated.resources.pl_logo
+import playlog.shared.generated.resources.sys_user_id
+import playlog.shared.generated.resources.timestamp
+import playlog.shared.generated.resources.verified_by_playlog_ai
+import kotlin.time.Clock
 
 @Composable
 fun GamerPassportUi(
@@ -66,7 +77,7 @@ fun GamerPassportUi(
     ) {
         // App logo
         Image(
-            painter = painterResource(id = R.drawable.pl_logo),
+            painter = painterResource(drawable.pl_logo),
             contentDescription = null,
             modifier = Modifier
                 .size(200.dp)
@@ -84,7 +95,7 @@ fun GamerPassportUi(
             ) {
                 Column {
                     Text(
-                        stringResource(R.string.sys_user_id),
+                        stringResource(string.sys_user_id),
                         color = AiAccent,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
@@ -107,7 +118,7 @@ fun GamerPassportUi(
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            stringResource(R.string.authenticated),
+                            stringResource(string.authenticated),
                             color = Color.Gray,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold
@@ -137,25 +148,25 @@ fun GamerPassportUi(
 
             // Statistic
             CyberStatItem(
-                stringResource(R.string.games_in_library),
+                stringResource(string.games_in_library),
                 totalGames.toString(),
                 PrimaryPurple
             )
             Spacer(modifier = Modifier.height(12.dp))
             CyberStatItem(
-                stringResource(R.string._100_completed),
+                stringResource(string._100_completed),
                 completedGames.toString(),
                 AiAccent
             )
             Spacer(modifier = Modifier.height(12.dp))
             CyberStatItem(
-                stringResource(R.string.peak_difficulty),
+                stringResource(string.peak_difficulty),
                 favDifficulty.uppercase(),
                 Color(0xFFFF3B30)
             )
             Spacer(modifier = Modifier.height(12.dp))
             CyberStatItem(
-                stringResource(R.string.mythical_trophies),
+                stringResource(string.mythical_trophies),
                 customChallengesCount.toString(),
                 Color(0xFFFFD700)
             )
@@ -176,13 +187,13 @@ fun GamerPassportUi(
             ) {
                 Column {
                     Text(
-                        stringResource(R.string.verified_by_playlog_ai),
+                        stringResource(string.verified_by_playlog_ai),
                         color = PrimaryPurple.copy(alpha = 0.6f),
                         fontSize = 8.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        stringResource(R.string.timestamp, System.currentTimeMillis() / 10000),
+                        stringResource(string.timestamp, Clock.System.now().toEpochMilliseconds() / 10000),
                         color = Color.DarkGray,
                         fontSize = 7.sp
                     )

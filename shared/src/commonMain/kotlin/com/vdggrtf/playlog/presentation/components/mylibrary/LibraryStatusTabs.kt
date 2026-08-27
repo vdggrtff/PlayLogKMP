@@ -18,15 +18,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vdggrtf.playlog.R
 import com.vdggrtf.playlog.domain.model.GameModel
 import com.vdggrtf.playlog.domain.model.GameStatus
 import com.vdggrtf.playlog.ui.theme.AiAccent
 import com.vdggrtf.playlog.ui.theme.PrimaryPurple
+import org.jetbrains.compose.resources.stringResource
+import playlog.shared.generated.resources.Res.string
+import playlog.shared.generated.resources.backlog
+import playlog.shared.generated.resources.completed
+import playlog.shared.generated.resources.playing
+import playlog.shared.generated.resources.total_games
 
 @Composable
 fun LibraryHeader(
@@ -47,7 +51,7 @@ fun LibraryHeader(
         // segmented progress bar
         if (totalGames > 0) {
             Text(
-                text = stringResource(R.string.total_games, totalGames),
+                text = stringResource(string.total_games, totalGames),
                 color = Color.Gray,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
@@ -108,9 +112,9 @@ fun LibraryHeader(
                 }
 
                 val title = when (status) {
-                    GameStatus.BACKLOG -> stringResource(R.string.backlog)
-                    GameStatus.PLAYING -> stringResource(R.string.playing)
-                    GameStatus.COMPLETED -> stringResource(R.string.completed)
+                    GameStatus.BACKLOG -> stringResource(string.backlog)
+                    GameStatus.PLAYING -> stringResource(string.playing)
+                    GameStatus.COMPLETED -> stringResource(string.completed)
                     else -> ""
                 }
 

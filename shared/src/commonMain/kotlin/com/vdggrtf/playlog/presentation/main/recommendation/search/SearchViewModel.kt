@@ -2,10 +2,9 @@ package com.vdggrtf.playlog.presentation.main.recommendation.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vdggrtf.playlog.domain.model.AdvancedFilters
 import com.vdggrtf.playlog.domain.model.GameModel
 import com.vdggrtf.playlog.domain.usecase.main.search.SearchGamesUseCase
-import com.vdggrtf.playlog.presentation.main.my_library.AdvancedFilters
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class SearchState(
     val isLoading: Boolean = false,
@@ -25,8 +23,7 @@ data class SearchState(
 )
 
 
-@HiltViewModel
-class SearchViewModel @Inject constructor(private val searchGamesUseCase: SearchGamesUseCase) :
+class SearchViewModel (private val searchGamesUseCase: SearchGamesUseCase) :
     ViewModel() {
 
     private val _state = MutableStateFlow(SearchState())

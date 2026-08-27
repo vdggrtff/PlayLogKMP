@@ -2,19 +2,12 @@ package com.vdggrtf.playlog.presentation.main.recommendation.ai
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vdggrtf.playlog.domain.model.GameModel
+import com.vdggrtf.playlog.domain.model.AiRecommendedGame
 import com.vdggrtf.playlog.domain.usecase.main.ai.GetAiRecommendationsWithDetailsUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-
-data class AiRecommendedGame(
-    val aiReason: String,
-    val gameDetails: GameModel?,
-)
 
 data class AiGameState(
     val isLoading: Boolean = false,
@@ -22,8 +15,7 @@ data class AiGameState(
     val recommendations: List<AiRecommendedGame> = emptyList(),
 )
 
-@HiltViewModel
-class AiRecommendationGameViewModel @Inject constructor(
+class AiRecommendationGameViewModel (
     private val getAiRecommendationsWithDetailsUseCase: GetAiRecommendationsWithDetailsUseCase,
 ) : ViewModel() {
 

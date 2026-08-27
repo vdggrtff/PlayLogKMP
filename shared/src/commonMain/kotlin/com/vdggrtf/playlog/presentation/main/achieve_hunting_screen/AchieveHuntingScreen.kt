@@ -19,17 +19,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.vdggrtf.playlog.R
 import com.vdggrtf.playlog.domain.model.AchievementDifficulty
 import com.vdggrtf.playlog.domain.model.GameModel
 import com.vdggrtf.playlog.presentation.components.card.DifficultySquareCard
 import com.vdggrtf.playlog.presentation.main.my_library.LibraryState
 import com.vdggrtf.playlog.presentation.main.my_library.MyLibraryViewModel
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import playlog.shared.generated.resources.Res.string
+import playlog.shared.generated.resources.hall_of_fame
+import playlog.shared.generated.resources.your_completed_games
 
 data class PyramidState(
     val row1: List<AchievementDifficulty>,
@@ -41,7 +43,7 @@ data class PyramidState(
 @Composable
 fun AchievementsRoute(
     onCategoryClick: (String) -> Unit,
-    viewModel: MyLibraryViewModel = hiltViewModel(),
+    viewModel: MyLibraryViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -100,14 +102,14 @@ fun AchievementsScreen(
             .verticalScroll(rememberScrollState())
     ) {
         Text(
-            stringResource(R.string.hall_of_fame),
+            stringResource(string.hall_of_fame),
             color = Color.White,
             fontSize = 32.sp,
             fontWeight = FontWeight.ExtraBold,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         Text(
-            stringResource(R.string.your_completed_games),
+            stringResource(string.your_completed_games),
             color = Color.Gray,
             fontSize = 16.sp,
             modifier = Modifier.padding(bottom = 32.dp)

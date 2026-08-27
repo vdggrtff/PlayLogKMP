@@ -15,6 +15,8 @@ junit = "4.13.2"
 kotlin = "2.4.10"
 kotlin-wrappers = "2026.8.4"
 kotlinx-coroutines = "1.11.0"
+kotlinx-datetime = "0.8.0"
+kotlinx-serialization = "1.11.0"
 material3 = "1.11.0-alpha07"
 ktor = "3.5.2"
 koin = "4.2.2"
@@ -23,11 +25,10 @@ androidx-room = "2.8.4"
 ksp = "2.3.4"
 materialIconsExtended = "1.7.3"
 sqlite = "2.7.0"
-kotlinx-datetime = "0.8.0"
 datastore = "1.2.1"
 okio = "3.18.1"
 navigationCompose = "2.9.2"
-coil = "3.0.0"
+coil = "3.5.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -66,7 +67,7 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 
-supabase-gotrue = { module = "io.github.jan-tennert.supabase:gotrue-kt", version = "2.6.1" }
+supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt", version = "3.8.0" }
 supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version = "3.7.0" }
 
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
@@ -75,6 +76,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "androidx-room" }
 
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
@@ -82,6 +84,7 @@ okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
+coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -95,3 +98,5 @@ buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "androidx-room" }
+
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

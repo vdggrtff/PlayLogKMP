@@ -12,6 +12,7 @@ import com.vdggrtf.playlog.domain.usecase.main.challenge.GetTrackedBountyGameIds
 import com.vdggrtf.playlog.domain.usecase.main.challenge.UpdateChallengeStatusUseCase
 import com.vdggrtf.playlog.domain.usecase.main.challenge.VerifyChallengeProofUseCase
 import com.vdggrtf.playlog.domain.usecase.main.game.ChangeGameStatusUseCase
+import com.vdggrtf.playlog.domain.usecase.main.game.FetchAndSyncRemoteGameUseCase
 import com.vdggrtf.playlog.domain.usecase.main.game.FinishGameWithRatingUseCase
 import com.vdggrtf.playlog.domain.usecase.main.game.GetBestGameDealUseCase
 import com.vdggrtf.playlog.domain.usecase.main.game.GetCommunityRatingUseCase
@@ -72,7 +73,12 @@ val domainModule = module {
 
     factory { ChangeGameStatusUseCase(libraryRepository = get()) }
 
-    factory { ChangeGameStatusUseCase(libraryRepository = get()) }
+    factory { FetchAndSyncRemoteGameUseCase(
+        gameRepository = get(),
+        aiRepository = get(),
+        raRepository = get(),
+        rawgAchievementRepository = get(),
+        ) }
 
     factory { FinishGameWithRatingUseCase(libraryRepository = get()) }
 

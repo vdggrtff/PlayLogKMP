@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.vdggrtf.playlog.presentation.main.recommendation.ai.AiRecommendedGame
+import com.vdggrtf.playlog.domain.model.AiRecommendedGame
 import org.jetbrains.compose.resources.stringResource
 import playlog.shared.generated.resources.Res
 import playlog.shared.generated.resources.n_a

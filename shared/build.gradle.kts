@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -67,13 +68,14 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.supabase.gotrue)
+            implementation(libs.supabase.auth)
             implementation(libs.supabase.postgrest)
 
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
 
             implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.serialization.json)
             implementation(libs.androidx.datastore.preferences.core)
             implementation(libs.okio)
 
@@ -89,6 +91,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.androidx.room.paging)
             implementation(libs.koin.android)
+            implementation(libs.coil.gif)
         }
         // 3. 💥 IOS (Использует нативный эппловский Darwin)
         iosMain.dependencies {

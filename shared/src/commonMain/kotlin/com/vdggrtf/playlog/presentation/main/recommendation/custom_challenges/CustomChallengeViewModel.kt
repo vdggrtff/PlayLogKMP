@@ -1,6 +1,6 @@
 package com.vdggrtf.playlog.presentation.main.recommendation.custom_challenges
 
-import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vdggrtf.playlog.domain.model.CustomChallengeModel
@@ -8,12 +8,10 @@ import com.vdggrtf.playlog.domain.model.GameStatus
 import com.vdggrtf.playlog.domain.usecase.main.challenge.GetCustomChallengesUseCase
 import com.vdggrtf.playlog.domain.usecase.main.challenge.UpdateChallengeStatusUseCase
 import com.vdggrtf.playlog.domain.usecase.main.challenge.VerifyChallengeProofUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class ChallengeBoardState(
     val isLoading: Boolean = false,
@@ -23,12 +21,15 @@ data class ChallengeBoardState(
     val successMessage: String? = null, // AI approved
 )
 
-@HiltViewModel
-class ChallengeBoardViewModel @Inject constructor(
+class ChallengeBoardViewModel (
+    savedStateHandle: SavedStateHandle,
     private val getCustomChallengesUseCase: GetCustomChallengesUseCase,
     private val updateChallengeStatusUseCase: UpdateChallengeStatusUseCase,
     private val verifyChallengeProofUseCase: VerifyChallengeProofUseCase,
 ) : ViewModel() {
+
+    val currentChallengeId: Int? = savedStateHandle.get<Int>("challengeId")
+        ?: savedStateHandle.get<String>("challengeId")?.toIntOrNull()
 
     private val _state = MutableStateFlow(ChallengeBoardState())
     val state = _state.asStateFlow()
@@ -98,7 +99,7 @@ class ChallengeBoardViewModel @Inject constructor(
                     _state.update { it.copy(challenges = updatedList) }
                 },
                 onFailure = {error ->
-                    Log.e("BOUNTY_BOARD", "Error updating status: ${error.message}")
+                    println("BOUNTY_BOARD Error updating status: ${error.message}")
                 }
             )
         }

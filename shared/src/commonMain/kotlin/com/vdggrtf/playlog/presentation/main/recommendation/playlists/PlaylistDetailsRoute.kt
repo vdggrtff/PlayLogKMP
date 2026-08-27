@@ -21,14 +21,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.vdggrtf.playlog.presentation.components.list.GamesListTemplate
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun PlaylistDetailsRoute(
     onBackClick: () -> Unit,
     onGameClick: (String) -> Unit,
-    viewModel: PlaylistDetailsViewModel = hiltViewModel()
+    viewModel: PlaylistDetailsViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     var gridColumns by remember { mutableIntStateOf(2) }

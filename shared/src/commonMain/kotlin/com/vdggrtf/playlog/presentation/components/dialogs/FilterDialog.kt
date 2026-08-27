@@ -53,8 +53,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.vdggrtf.playlog.domain.model.AchievementDifficulty
+import com.vdggrtf.playlog.domain.model.AdvancedFilters
 import com.vdggrtf.playlog.presentation.components.card.getDrawableRes
-import com.vdggrtf.playlog.presentation.main.my_library.AdvancedFilters
 import com.vdggrtf.playlog.ui.theme.CardBackground
 import com.vdggrtf.playlog.ui.theme.accentColor
 import com.vdggrtf.playlog.ui.theme.bgColor

@@ -109,10 +109,9 @@ fun AppNavGraph(navController: NavHostController) {
             arguments = listOf(navArgument("challengeId") { type = NavType.IntType })
         ) { backStackEntry ->
             // FIX 2: Extract the ID from the URL and pass it to the Route
-            val challengeId = backStackEntry.arguments?.getInt("challengeId") ?: return@composable
+
 
             ChallengeDetailsRoute(
-                challengeId = challengeId, // Passed here!
                 onBackClick = { navController.popBackStack() },
                 onNavigateToGame = { gameId -> navController.navigate("details/$gameId") }
             )
@@ -147,10 +146,8 @@ fun AppNavGraph(navController: NavHostController) {
             route = "difficulty_games/{difficultyName}",
             arguments = listOf(navArgument("difficultyName") { NavType.StringType })
         ) { backStackEntry ->
-            val diffName = backStackEntry.arguments?.getString("difficultyName") ?: "NONE"
 
             DifficultyGamesRoute(
-                difficultyName = diffName,
                 onBack = { navController.popBackStack() },
                 onGameClick = { gameId ->
                     navController.navigate("details/$gameId")

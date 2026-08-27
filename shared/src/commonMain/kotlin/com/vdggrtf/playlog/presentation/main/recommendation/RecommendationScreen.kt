@@ -34,11 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.vdggrtf.playlog.R
 import com.vdggrtf.playlog.domain.model.PlaylistModel
 import com.vdggrtf.playlog.presentation.components.dashboard.DashboardSection
 import com.vdggrtf.playlog.presentation.components.dashboard.GameCarouselCard
@@ -47,6 +44,10 @@ import com.vdggrtf.playlog.presentation.components.dialogs.AdvancedFiltersScreen
 import com.vdggrtf.playlog.presentation.components.tabs.DiscoveryWidgetsRow
 import com.vdggrtf.playlog.ui.theme.Background
 import com.vdggrtf.playlog.ui.theme.CardBackground
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import playlog.shared.generated.resources.Res.string
+import playlog.shared.generated.resources.find_game
 
 @Composable
 fun RecommendationRoute(
@@ -56,7 +57,7 @@ fun RecommendationRoute(
     onNavigateToChallenges: () -> Unit,
     onNavigateToSeeAll: (String) -> Unit,
     onNavigateToPlaylist: (String) -> Unit,
-    viewModel: RecommendationViewModel = hiltViewModel(),
+    viewModel: RecommendationViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
     val advancedFilters by viewModel.advancedFilters.collectAsState()
@@ -127,7 +128,7 @@ fun RecommendationScreen(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Default.Search, contentDescription = null, tint = Color.Gray)
                     Spacer(modifier = Modifier.width(12.dp))
-                    Text(stringResource(R.string.find_game), color = Color.Gray, fontSize = 16.sp)
+                    Text(stringResource(string.find_game), color = Color.Gray, fontSize = 16.sp)
                 }
             }
 

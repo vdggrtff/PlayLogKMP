@@ -1,6 +1,5 @@
 package com.vdggrtf.playlog.presentation.main.game_details
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,13 +20,12 @@ import com.vdggrtf.playlog.domain.usecase.main.game.ObserveLocalGameStatusUseCas
 import com.vdggrtf.playlog.domain.usecase.main.game.RetryAiEvaluationUseCase
 import com.vdggrtf.playlog.domain.usecase.main.playlist.AddGameToPlaylistUseCase
 import com.vdggrtf.playlog.domain.usecase.main.playlist.ObserveMyPlaylistsUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class GameDetailsState(
     val isLoading: Boolean = false,
@@ -49,9 +47,7 @@ data class GameDetailsState(
     val myPlaylists: List<PlaylistModel> = emptyList()
 )
 
-
-@HiltViewModel
-class GameDetailsViewModel @Inject constructor(
+class GameDetailsViewModel (
     private val getLocalGameUseCase: GetLocalGameUseCase,
     private val observeLocalGameStatusUseCase: ObserveLocalGameStatusUseCase,
     private val retryAiEvaluationUseCase: RetryAiEvaluationUseCase,
@@ -230,8 +226,8 @@ class GameDetailsViewModel @Inject constructor(
         val gameId = _state.value.game?.id ?: return
         viewModelScope.launch {
             addGameToPlaylistUseCase(playlistId = playlistId, gameId = gameId).fold(
-                onSuccess = { Log.d("GameDetails", "Игра добавлена в плейлист!") },
-                onFailure = { Log.e("GameDetails", "Ошибка: ${it.message}") }
+                onSuccess = { println("GameDetails Игра добавлена в плейлист!") },
+                onFailure = { println("GameDetails Ошибка: ${it.message}") }
             )
         }
     }

@@ -20,15 +20,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.vdggrtf.playlog.R
 import com.vdggrtf.playlog.ui.theme.CardBackground
 import com.vdggrtf.playlog.ui.theme.PrimaryPurple
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import playlog.shared.generated.resources.Res.drawable
+import playlog.shared.generated.resources.Res.string
+import playlog.shared.generated.resources.gaben_fairy
+import playlog.shared.generated.resources.hello_your_library_is_empty_click_on_the_button_below_to_add_games_manually_or_through_ai_magic
+import playlog.shared.generated.resources.little_fairy
+import playlog.shared.generated.resources.look_here
 
 @Composable
 fun FairyHintWithArrow() {
@@ -51,7 +56,7 @@ fun FairyHintWithArrow() {
                 shadowElevation = 8.dp
             ) {
                 Text(
-                    text = stringResource(R.string.hello_your_library_is_empty_click_on_the_button_below_to_add_games_manually_or_through_ai_magic),
+                    text = stringResource(string.hello_your_library_is_empty_click_on_the_button_below_to_add_games_manually_or_through_ai_magic),
                     color = Color.White,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center,
@@ -66,8 +71,8 @@ fun FairyHintWithArrow() {
             }
 
             Image(
-                painter = painterResource(R.drawable.little_fairy),
-                contentDescription = stringResource(R.string.gaben_fairy),
+                painter = painterResource(drawable.little_fairy),
+                contentDescription = stringResource(string.gaben_fairy),
                 modifier = Modifier
                     .size(130.dp)
                     .offset(y = (-20).dp)
@@ -79,7 +84,7 @@ fun FairyHintWithArrow() {
 
         Icon(
             imageVector = Icons.Default.ArrowForward,
-            contentDescription = stringResource(R.string.look_here),
+            contentDescription = stringResource(string.look_here),
             tint = Color.Red,
             modifier = Modifier
                 .align(Alignment.BottomEnd)

@@ -12,15 +12,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.vdggrtf.playlog.presentation.components.dialogs.AdvancedFiltersScreen
 import com.vdggrtf.playlog.presentation.components.list.GamesListTemplate
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SeeAllGamesRoute(
     onBackClick: () -> Unit,
     onGameClick: (String) -> Unit,
-    viewModel: SeeAllGamesViewModel = hiltViewModel()
+    viewModel: SeeAllGamesViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val advancedFilters by viewModel.advancedFilters.collectAsState()

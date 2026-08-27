@@ -13,13 +13,11 @@ import com.vdggrtf.playlog.domain.usecase.main.profile.LogoutUseCase
 import com.vdggrtf.playlog.domain.usecase.main.profile.ObserveCachedUserUseCase
 import com.vdggrtf.playlog.domain.usecase.main.profile.ObserveProfileStatsUseCase
 import com.vdggrtf.playlog.domain.usecase.main.profile.SyncUserProfileUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class ProfileState(
     val email: String = "",
@@ -38,8 +36,7 @@ data class ProfileState(
 )
 
 
-@HiltViewModel
-class ProfileViewModel @Inject constructor(
+class ProfileViewModel (
     private val observeCachedUserUseCase: ObserveCachedUserUseCase,
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
     private val observeProfileStatsUseCase: ObserveProfileStatsUseCase,
@@ -47,7 +44,6 @@ class ProfileViewModel @Inject constructor(
     private val getCompletedBountiesCountUseCase: GetCompletedBountiesCountUseCase,
     private val observeMyPlaylistsUseCase: ObserveMyPlaylistsUseCase,
     private val syncPlaylistsUseCase: SyncPlaylistsUseCase,
-    private val createPlaylistUseCase: CreatePlaylistUseCase,
     private val logoutUseCase: LogoutUseCase,
 ) : ViewModel() {
 

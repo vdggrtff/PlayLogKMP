@@ -10,26 +10,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.vdggrtf.playlog.R
+import co.touchlab.kermit.Logger.Companion.v
 import com.vdggrtf.playlog.domain.model.AchievementDifficulty
 import com.vdggrtf.playlog.domain.model.GameModel
 import com.vdggrtf.playlog.presentation.components.list.GamesListTemplate
 import com.vdggrtf.playlog.presentation.main.my_library.LibraryState
 import com.vdggrtf.playlog.presentation.main.my_library.MyLibraryViewModel
 import com.vdggrtf.playlog.presentation.main.recommendation.custom_challenges.ChallengeBoardRoute
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import playlog.shared.generated.resources.Res.string
+import playlog.shared.generated.resources.there_are_no_completed_games_in_this_category_yet
 
 @Composable
 fun DifficultyGamesRoute(
-    difficultyName: String,
     onBack: () -> Unit,
     onGameClick: (String) -> Unit,
     onChallengeClick: (Int) -> Unit,
-    viewModel: MyLibraryViewModel = hiltViewModel(),
+    viewModel: MyLibraryViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
+
+    val difficultyName = viewModel.currentDifficultyName
 
     if (difficultyName == AchievementDifficulty.CUSTOM_CHALLENGE.name) {
         // 🚀 If Challenge go to Challenge board
@@ -84,7 +87,7 @@ fun DifficultyGamesScreen(
             // Just in case
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(
-                    stringResource(R.string.there_are_no_completed_games_in_this_category_yet),
+                    stringResource(string.there_are_no_completed_games_in_this_category_yet),
                     color = Color.Gray,
                     fontSize = 16.sp
                 )

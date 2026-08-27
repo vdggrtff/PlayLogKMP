@@ -25,20 +25,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.vdggrtf.playlog.R
+import com.vdggrtf.playlog.domain.model.AdvancedFilters
 import com.vdggrtf.playlog.presentation.components.dialogs.AdvancedFiltersScreen
 import com.vdggrtf.playlog.presentation.components.list.GamesListTemplate
-import com.vdggrtf.playlog.presentation.main.my_library.AdvancedFilters
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import playlog.shared.generated.resources.Res.string
+import playlog.shared.generated.resources.add_game_name
+import playlog.shared.generated.resources.clear
+import playlog.shared.generated.resources.game_not_found
+import playlog.shared.generated.resources.let_s_find_some_games
 
 @Composable
 fun SearchRoute(
     onBack: () -> Unit,
     onGameClick: (String) -> Unit,
-    viewModel: SearchViewModel = hiltViewModel()
+    viewModel: SearchViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val advancedFilters by viewModel.advancedFilters.collectAsState()
@@ -92,7 +96,7 @@ fun SearchScreen(
             OutlinedTextField(
                 value = state.query,
                 onValueChange = onValueChange,
-                placeholder = { Text(stringResource(R.string.add_game_name), color = Color.Gray) },
+                placeholder = { Text(stringResource(string.add_game_name), color = Color.Gray) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -109,7 +113,7 @@ fun SearchScreen(
                         IconButton(onClick = onClear) {
                             Icon(
                                 Icons.Default.Clear,
-                                contentDescription = stringResource(R.string.clear),
+                                contentDescription = stringResource(string.clear),
                                 tint = Color.White
                             )
                         }
@@ -131,8 +135,8 @@ fun SearchScreen(
         // if there are no games (empty state)
         emptyStateContent = {
             val message =
-                if (state.query.isEmpty()) stringResource(R.string.let_s_find_some_games) else stringResource(
-                    R.string.game_not_found
+                if (state.query.isEmpty()) stringResource(string.let_s_find_some_games) else stringResource(
+                    string.game_not_found
                 )
             Box(Modifier.fillMaxSize(), Alignment.Center) {
                 Text(message, color = Color.Gray, fontSize = 16.sp)

@@ -1,7 +1,5 @@
 package com.vdggrtf.playlog.presentation.main.profile
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -45,26 +43,34 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.vdggrtf.playlog.R
-import com.vdggrtf.playlog.presentation.components.profile.GamerPassportUi
 import com.vdggrtf.playlog.presentation.components.dialogs.PassportShareDialog
+import com.vdggrtf.playlog.presentation.components.profile.GamerPassportUi
 import com.vdggrtf.playlog.ui.theme.Background
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import playlog.shared.generated.resources.Res.string
+import playlog.shared.generated.resources.about_app
+import playlog.shared.generated.resources.edit_profile
+import playlog.shared.generated.resources.log_out
+import playlog.shared.generated.resources.profile
+import playlog.shared.generated.resources.settings
+import playlog.shared.generated.resources.share_id
+import playlog.shared.generated.resources.support
+import playlog.shared.generated.resources.support_solo_dev
 
 // 1. SMART ROUTE: Handles ViewModel, Context, Intents and Navigation
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProfileRoute(
     onLogoutSuccess: () -> Unit,
-    viewModel: ProfileViewModel = hiltViewModel()
+    viewModel: ProfileViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
 
     // Redirect to login if user logged out
     LaunchedEffect(state.isLoggedOut) {
@@ -77,7 +83,7 @@ fun ProfileRoute(
     // Launch Boosty intent
     val onDonateClick = {
         val donateUrl = "https://boosty.to/playlog_app/donate"
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(donateUrl)))
+        uriHandler.openUri(donateUrl)
     }
 
     ProfileScreen(
@@ -117,7 +123,7 @@ fun ProfileScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.profile),
+                text = stringResource(string.profile),
                 color = Color.White,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.ExtraBold,
@@ -129,7 +135,7 @@ fun ProfileScreen(
                 onClick = { showPassportDialog = true },
                 modifier = Modifier.background(Color(0xFF1E1E26), CircleShape)
             ) {
-                Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share_id), tint = Color.White)
+                Icon(Icons.Default.Share, contentDescription = stringResource(string.share_id), tint = Color.White)
             }
         }
 
@@ -156,10 +162,10 @@ fun ProfileScreen(
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)),
             shape = RoundedCornerShape(12.dp)
         ) {
-            Icon(Icons.Default.Favorite, contentDescription = stringResource(R.string.support), tint = Color.White)
+            Icon(Icons.Default.Favorite, contentDescription = stringResource(string.support), tint = Color.White)
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = stringResource(R.string.support_solo_dev),
+                text = stringResource(string.support_solo_dev),
                 color = Color.White,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 14.sp,
@@ -176,11 +182,11 @@ fun ProfileScreen(
                 .background(Color(0xFF1E1E26), RoundedCornerShape(16.dp))
                 .padding(16.dp)
         ) {
-            ProfileMenuItem(icon = Icons.Default.Edit, title = stringResource(R.string.edit_profile))
+            ProfileMenuItem(icon = Icons.Default.Edit, title = stringResource(string.edit_profile))
             HorizontalDivider(color = Color.DarkGray, modifier = Modifier.padding(vertical = 12.dp))
-            ProfileMenuItem(icon = Icons.Default.Settings, title = stringResource(R.string.settings))
+            ProfileMenuItem(icon = Icons.Default.Settings, title = stringResource(string.settings))
             HorizontalDivider(color = Color.DarkGray, modifier = Modifier.padding(vertical = 12.dp))
-            ProfileMenuItem(icon = Icons.Default.Info, title = stringResource(R.string.about_app))
+            ProfileMenuItem(icon = Icons.Default.Info, title = stringResource(string.about_app))
         }
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -201,7 +207,7 @@ fun ProfileScreen(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = stringResource(R.string.log_out),
+                text = stringResource(string.log_out),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFFFF3B30)

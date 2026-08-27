@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.vdggrtf.playlog.domain.model.AchievementDifficulty
 import com.vdggrtf.playlog.domain.model.GameModel
 import com.vdggrtf.playlog.domain.usecase.main.ai.VerifyGameCompletionUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -18,8 +16,7 @@ data class VerificationState(
     val error: String? = null,
 )
 
-@HiltViewModel
-class VerificationViewModel @Inject constructor(
+class VerificationViewModel (
     private val verifyGameCompletionUseCase: VerifyGameCompletionUseCase,
 ) : ViewModel() {
 

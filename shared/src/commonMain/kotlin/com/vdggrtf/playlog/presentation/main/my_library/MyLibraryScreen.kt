@@ -29,13 +29,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.vdggrtf.playlog.R
+import com.vdggrtf.playlog.domain.model.AdvancedFilters
 import com.vdggrtf.playlog.domain.model.GameStatus
 import com.vdggrtf.playlog.presentation.components.dialogs.AdvancedFiltersScreen
 import com.vdggrtf.playlog.presentation.components.dialogs.CreatePlaylistDialog
@@ -48,13 +46,19 @@ import com.vdggrtf.playlog.ui.theme.AiAccent
 import com.vdggrtf.playlog.ui.theme.CardBackground
 import com.vdggrtf.playlog.ui.theme.PrimaryPurple
 import com.vdggrtf.playlog.ui.theme.bgColor
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import playlog.shared.generated.resources.Res.string
+import playlog.shared.generated.resources.close_library_screen
+import playlog.shared.generated.resources.library
+import playlog.shared.generated.resources.manual
 
 @Composable
 fun LibraryRoute(
     onGameClick: (String) -> Unit,
     onNavigateToSearch: () -> Unit,
-    libraryViewModel: MyLibraryViewModel = hiltViewModel(),
-    scannerViewModel: ScannerViewModel = hiltViewModel(),
+    libraryViewModel: MyLibraryViewModel = koinViewModel(),
+    scannerViewModel: ScannerViewModel = koinViewModel(),
 ) {
     val state by libraryViewModel.state.collectAsState()
     val advancedFilters by libraryViewModel.advancedFilters.collectAsState()
@@ -149,7 +153,7 @@ fun LibraryScreen(
                         Spacer(Modifier.height(16.dp))
                         androidx.compose.material3.TextButton(onClick = onClearScanner) {
                             Text(
-                                stringResource(R.string.close_library_screen),
+                                stringResource(string.close_library_screen),
                                 color = PrimaryPurple
                             )
                         }
@@ -195,7 +199,7 @@ fun LibraryScreen(
                     ) {
                         Icon(
                             Icons.Default.Search,
-                            contentDescription = stringResource(R.string.manual),
+                            contentDescription = stringResource(string.manual),
                             tint = Color.White
                         )
                     }
@@ -213,7 +217,7 @@ fun LibraryScreen(
         }
     ) { paddingValues ->
         GamesListTemplate(
-            title = stringResource(R.string.library),
+            title = stringResource(string.library),
             isLoading = state.isLoading,
             games = state.displayedGames,
             gridColumns = gridColumns,

@@ -1,16 +1,16 @@
 package com.vdggrtf.playlog.presentation.main.my_library
 
-import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vdggrtf.playlog.domain.model.AchievementDifficulty
+import com.vdggrtf.playlog.domain.model.AdvancedFilters
 import com.vdggrtf.playlog.domain.model.GameModel
 import com.vdggrtf.playlog.domain.model.GameStatus
 import com.vdggrtf.playlog.domain.usecase.main.challenge.GetTrackedBountyGameIdsUseCase
 import com.vdggrtf.playlog.domain.usecase.main.library.GetCompletedBountiesCountUseCase
 import com.vdggrtf.playlog.domain.usecase.main.library.ObserveMyLibraryUseCase
 import com.vdggrtf.playlog.domain.usecase.main.playlist.CreatePlaylistUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
@@ -18,16 +18,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-
-data class AdvancedFilters(
-    val ratingRange: ClosedFloatingPointRange<Float> = 0f..5f,
-    val yearRange: ClosedFloatingPointRange<Float> = 1990f..2026f,
-    val difficulty: AchievementDifficulty = AchievementDifficulty.NONE,
-    val hasBounties: Boolean = false,
-    val selectedGenres: List<String> = emptyList(),
-    val selectedPlatforms: List<String> = emptyList(),
-)
 
 data class LibraryState(
     val isLoading: Boolean = false,
@@ -37,13 +27,15 @@ data class LibraryState(
     val gridColumns: Int = 2,
 )
 
-@HiltViewModel
-class MyLibraryViewModel @Inject constructor(
+class MyLibraryViewModel (
+    savedStateHandle: SavedStateHandle,
     private val observeMyLibraryUseCase: ObserveMyLibraryUseCase,
     private val getCompletedBountiesCountUseCase: GetCompletedBountiesCountUseCase,
     private val getTrackedBountyGameIdsUseCase: GetTrackedBountyGameIdsUseCase,
     private val createPlaylistUseCase: CreatePlaylistUseCase,
 ) : ViewModel() {
+
+    val currentDifficultyName: String = savedStateHandle.get<String>("difficultyName") ?: "NONE"
 
     private val _state = MutableStateFlow(LibraryState())
     val state = _state.asStateFlow()
@@ -70,11 +62,11 @@ class MyLibraryViewModel @Inject constructor(
             ) { gamesList, currentStatus, advancedFilters, gamesWithBounties ->
 
                 var filtered = gamesList
-                Log.d("FILTER_DEBUG", "1. Исходно игр: ${filtered.size}")
+                println("FILTER_DEBUG 1. Исходно игр: ${filtered.size}")
 
                 // status filter
                 filtered = filtered.filter { it.status == currentStatus }
-                Log.d("FILTER_DEBUG", "2. После статуса ($currentStatus): ${filtered.size}")
+                println("FILTER_DEBUG 2. После статуса ($currentStatus): ${filtered.size}")
 
                 // difficulty filter
                 if (advancedFilters.difficulty != AchievementDifficulty.NONE) {
@@ -89,7 +81,7 @@ class MyLibraryViewModel @Inject constructor(
                         actualDifficulty == advancedFilters.difficulty
                     }
                 }
-                Log.d("FILTER_DEBUG", "3. После сложности: ${filtered.size}")
+                println("FILTER_DEBUG 3. После сложности: ${filtered.size}")
 
                 // year and rating filter
                 filtered = filtered.filter { game ->
@@ -98,7 +90,7 @@ class MyLibraryViewModel @Inject constructor(
 
                     rating in advancedFilters.ratingRange && year in advancedFilters.yearRange
                 }
-                Log.d("FILTER_DEBUG", "6. ФИНАЛ (После рейтинга и года): ${filtered.size}")
+                println("FILTER_DEBUG 6. ФИНАЛ (После рейтинга и года): ${filtered.size}")
 
                 // genre filter
                 if (advancedFilters.selectedGenres.isNotEmpty()) {
@@ -110,7 +102,7 @@ class MyLibraryViewModel @Inject constructor(
                         }
                     }
                 }
-                Log.d("FILTER_DEBUG", "4. После жанров: ${filtered.size}")
+                println("FILTER_DEBUG 4. После жанров: ${filtered.size}")
 
                 // platforms filter
                 if (advancedFilters.selectedPlatforms.isNotEmpty()) {
@@ -127,13 +119,13 @@ class MyLibraryViewModel @Inject constructor(
                         }
                     }
                 }
-                Log.d("FILTER_DEBUG", "platforms filter: ${filtered.size}")
+                println("FILTER_DEBUG platforms filter: ${filtered.size}")
 
                 // have game challenge or not
                 if (advancedFilters.hasBounties){
                     filtered = filtered.filter { gamesWithBounties.contains(it.id) }
                 }
-                Log.d("FILTER_DEBUG", "5. После свитча Bounties: ${filtered.size}")
+                println("FILTER_DEBUG 5. После свитча Bounties: ${filtered.size}")
 
                 filtered
             }.collect { resultList ->
@@ -156,7 +148,7 @@ class MyLibraryViewModel @Inject constructor(
             // 💥 2. НОВОЕ: ЗАПОЛНЯЕМ НАШУ КОРОБКУ ДЛЯ ФИЛЬТРА!
             launch {
                 val gameIds = getTrackedBountyGameIdsUseCase()
-                Log.d("BOUNTY_DEBUG", "💥 Скачали ID игр с контрактами: $gameIds")
+                println("BOUNTY_DEBUG 💥 Скачали ID игр с контрактами: $gameIds")
                 _gamesWithCompletedChallenges.value = gameIds
             }
 
@@ -184,10 +176,10 @@ class MyLibraryViewModel @Inject constructor(
         viewModelScope.launch {
             createPlaylistUseCase(title, description).fold(
                 onSuccess = {playlist ->
-                    Log.d("Library", "Плейлист $title успешно создан!")
+                    println("Library Плейлист $title успешно создан!")
                 },
                 onFailure = { e ->
-                    Log.e("Library", "Ошибка создания плейлиста: ${e.message}")
+                    println("Library Ошибка создания плейлиста: ${e.message}")
                 }
             )
         }

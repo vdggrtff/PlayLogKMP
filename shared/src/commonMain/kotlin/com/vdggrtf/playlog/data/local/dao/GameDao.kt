@@ -16,22 +16,22 @@ interface GameDao {
     fun getMyLibrary(): Flow<List<GameEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addGame(game: GameEntity)
+    suspend fun addGame(game: GameEntity)
 
     @Delete
-    fun deleteGame(game: GameEntity)
+    suspend fun deleteGame(game: GameEntity)
 
     @Query("SELECT * FROM $GAME_DB_NAME WHERE id = :gameId")
-    fun getGameById(gameId: Int): Flow<GameEntity?>
+   fun getGameById(gameId: Int): Flow<GameEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(games: List<GameEntity>)
+    suspend fun insertAll(games: List<GameEntity>)
 
     @Query("DELETE FROM games_library")
-    fun clearAllGames()
+    suspend fun clearAllGames()
 
     @Query("SELECT * FROM $GAME_DB_NAME WHERE id = :gameId LIMIT 1")
-    fun getGameByIdSync(gameId: Int): GameEntity?
+    suspend fun getGameByIdSync(gameId: Int): GameEntity?
 
     @Query("""
         SELECT games_library.* FROM games_library 

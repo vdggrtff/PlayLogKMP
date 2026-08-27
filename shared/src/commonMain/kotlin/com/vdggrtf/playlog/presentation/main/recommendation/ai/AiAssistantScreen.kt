@@ -40,23 +40,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.vdggrtf.playlog.R
 import com.vdggrtf.playlog.presentation.components.card.AiRecommendationCard
 import com.vdggrtf.playlog.ui.theme.AiAccent
 import com.vdggrtf.playlog.ui.theme.AiGradient
 import com.vdggrtf.playlog.ui.theme.bgColor
 import com.vdggrtf.playlog.ui.theme.cardColor
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import playlog.shared.generated.resources.Res.string
+import playlog.shared.generated.resources.ai_agent
+import playlog.shared.generated.resources.back
+import playlog.shared.generated.resources.describe_the_game
+import playlog.shared.generated.resources.describe_your_dream_game
+import playlog.shared.generated.resources.for_example_i_want_a_dark_shooter_in_space_with_a_great_plot_similar_to_dead_space
+import playlog.shared.generated.resources.gemini_is_analyzing_the_game_database
+import playlog.shared.generated.resources.send
 
 @Composable
 fun AiAssistantRoute(
     onBackClick: () -> Unit,
     onGameClick: (String) -> Unit,
-    viewModel: AiRecommendationGameViewModel = hiltViewModel()
+    viewModel: AiRecommendationGameViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -102,12 +109,12 @@ fun AiAssistantScreen(
             IconButton(onClick = onBackClick) {
                 Icon(
                     Icons.Default.ArrowBack,
-                    contentDescription = stringResource(R.string.back),
+                    contentDescription = stringResource(string.back),
                     tint = Color.White
                 )
             }
             Text(
-                text = stringResource(R.string.ai_agent),
+                text = stringResource(string.ai_agent),
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
@@ -131,7 +138,7 @@ fun AiAssistantScreen(
                         CircularProgressIndicator(color = AiAccent)
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            stringResource(R.string.gemini_is_analyzing_the_game_database),
+                            stringResource(string.gemini_is_analyzing_the_game_database),
                             color = AiAccent,
                             fontSize = 14.sp
                         )
@@ -156,14 +163,14 @@ fun AiAssistantScreen(
                         Text("🤖", fontSize = 80.sp)
                         Spacer(modifier = Modifier.height(24.dp))
                         Text(
-                            text = stringResource(R.string.describe_your_dream_game),
+                            text = stringResource(string.describe_your_dream_game),
                             color = Color.White,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = stringResource(R.string.for_example_i_want_a_dark_shooter_in_space_with_a_great_plot_similar_to_dead_space),
+                            text = stringResource(string.for_example_i_want_a_dark_shooter_in_space_with_a_great_plot_similar_to_dead_space),
                             color = Color.Gray,
                             fontSize = 14.sp,
                             textAlign = androidx.compose.ui.text.style.TextAlign.Center
@@ -207,7 +214,7 @@ fun AiAssistantScreen(
                     onValueChange = onValueChange,
                     placeholder = {
                         Text(
-                            stringResource(R.string.describe_the_game),
+                            stringResource(string.describe_the_game),
                             color = Color.Gray
                         )
                     },
@@ -237,7 +244,7 @@ fun AiAssistantScreen(
                 ) {
                     Icon(
                         Icons.AutoMirrored.Filled.Send,
-                        contentDescription = stringResource(R.string.send),
+                        contentDescription = stringResource(string.send),
                         tint = Color.White
                     )
                 }

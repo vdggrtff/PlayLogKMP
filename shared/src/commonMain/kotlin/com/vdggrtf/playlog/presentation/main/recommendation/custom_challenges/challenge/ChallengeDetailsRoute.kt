@@ -47,13 +47,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import coil.compose.AsyncImage
-import com.vdggrtf.playlog.R
+import coil3.compose.AsyncImage
 import com.vdggrtf.playlog.domain.model.CustomChallengeModel
 import com.vdggrtf.playlog.domain.model.GameStatus
 import com.vdggrtf.playlog.presentation.components.bottom_sheet.ChallengeManagementBottomSheet
@@ -63,20 +60,22 @@ import com.vdggrtf.playlog.presentation.main.recommendation.custom_challenges.Ch
 import com.vdggrtf.playlog.ui.theme.AiAccent
 import com.vdggrtf.playlog.ui.theme.CardBackground
 import com.vdggrtf.playlog.ui.theme.bgColor
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import playlog.shared.generated.resources.Res.string
+import playlog.shared.generated.resources.add
+import playlog.shared.generated.resources.in_library
 
 // 1. ROUTE (Smart Wrapper)
 @Composable
 fun ChallengeDetailsRoute(
-    challengeId: Int,
     onBackClick: () -> Unit,
     onNavigateToGame: (Int) -> Unit,
-    viewModel: ChallengeBoardViewModel = hiltViewModel() // Assuming you fetch the challenge here
+    viewModel: ChallengeBoardViewModel = koinViewModel() // Assuming you fetch the challenge here
 ) {
     val state by viewModel.state.collectAsState()
     var showProofDialog by remember { mutableStateOf(false) }
-
-    // We assume the ViewModel fetched the challenge based on NavArgument
-    val challenge = state.challenges.find { it.id == challengeId } // Temporarily taking the first one for testing
+    val challenge = state.challenges.find { it.id == viewModel.currentChallengeId }
 
     if (challenge != null) {
         ProofUploadDialog(
@@ -154,7 +153,7 @@ fun ChallengeDetailsScreen(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = if (isSavedLibrary) stringResource(R.string.in_library) else stringResource(R.string.add),
+                    text = if (isSavedLibrary) stringResource(string.in_library) else stringResource(string.add),
                     fontWeight = FontWeight.Bold
                 )
             }

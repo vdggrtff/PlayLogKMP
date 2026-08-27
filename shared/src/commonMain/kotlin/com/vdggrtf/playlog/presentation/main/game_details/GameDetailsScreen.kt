@@ -36,11 +36,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.vdggrtf.playlog.R
 import com.vdggrtf.playlog.domain.model.AchievementDifficulty
 import com.vdggrtf.playlog.domain.model.GameModel
 import com.vdggrtf.playlog.domain.model.GameStatus
@@ -59,12 +56,20 @@ import com.vdggrtf.playlog.presentation.components.dialogs.UserRatingDialog
 import com.vdggrtf.playlog.presentation.main.my_library.scaner.VerificationViewModel
 import com.vdggrtf.playlog.ui.theme.Background
 import com.vdggrtf.playlog.ui.theme.PrimaryPurple
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import playlog.shared.generated.resources.Res.string
+import playlog.shared.generated.resources.add
+import playlog.shared.generated.resources.back
+import playlog.shared.generated.resources.description_is_out
+import playlog.shared.generated.resources.in_library
+import playlog.shared.generated.resources.no_achievements
 
 @Composable
 fun GameDetailsRoute(
     onBackClick: () -> Unit,
-    gameViewModel: GameDetailsViewModel = hiltViewModel(),
-    verificationViewModel: VerificationViewModel = hiltViewModel(),
+    gameViewModel: GameDetailsViewModel = koinViewModel(),
+    verificationViewModel: VerificationViewModel = koinViewModel(),
 ) {
     val gameState by gameViewModel.state.collectAsState()
     val verificationState by verificationViewModel.state.collectAsState()
@@ -167,8 +172,8 @@ fun GameDetailsScreen(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = if (gameState.isSavedLibrary) stringResource(R.string.in_library) else stringResource(
-                        R.string.add
+                    text = if (gameState.isSavedLibrary) stringResource(string.in_library) else stringResource(
+                        string.add
                     ),
                     fontWeight = FontWeight.Bold
                 )
@@ -196,7 +201,7 @@ fun GameDetailsScreen(
                     ) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back),
+                            contentDescription = stringResource(string.back),
                             tint = Color.White
                         )
                     }
@@ -245,7 +250,7 @@ fun GameDetailsScreen(
                 item {
                     ExpandableDescription(
                         text = game.descriptionRaw
-                            ?: stringResource(R.string.description_is_out)
+                            ?: stringResource(string.description_is_out)
                     )
                 }
             } else {
@@ -257,7 +262,7 @@ fun GameDetailsScreen(
                                 .padding(32.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(stringResource(R.string.no_achievements), color = Color.Gray)
+                            Text(stringResource(string.no_achievements), color = Color.Gray)
                         }
                     }
                 } else {

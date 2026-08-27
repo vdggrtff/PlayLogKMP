@@ -17,11 +17,13 @@ data class IgdbGameDto(
 )
 
 // Универсальный DTO для картинок (Обложки и Скриншоты)
+@Serializable
 data class IgdbImageDto(
     @SerialName("image_id") val imageId: String?
 )
 
 // Универсальный DTO для Жанров и Платформ (у них структура одинаковая)
+@Serializable
 data class IgdbNameDto(
     @SerialName("name") val name: String
 )

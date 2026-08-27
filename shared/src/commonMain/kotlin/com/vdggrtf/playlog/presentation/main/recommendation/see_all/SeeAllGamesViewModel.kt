@@ -3,13 +3,10 @@ package com.vdggrtf.playlog.presentation.main.recommendation.see_all
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.touchlab.kermit.Logger.Companion.a
+import com.vdggrtf.playlog.domain.model.AdvancedFilters
 import com.vdggrtf.playlog.domain.model.GameModel
 import com.vdggrtf.playlog.domain.usecase.main.recommendation.GetIndieGamesUseCase
 import com.vdggrtf.playlog.domain.usecase.main.recommendation.GetPopularGamesUseCase
-import com.vdggrtf.playlog.presentation.main.my_library.AdvancedFilters
-import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -24,8 +21,7 @@ data class SeeAllState(
     val error: String? = null
 )
 
-@HiltViewModel
-class SeeAllGamesViewModel @Inject constructor(
+class SeeAllGamesViewModel (
     savedStateHandle: SavedStateHandle,
     private val getPopularGamesUseCase: GetPopularGamesUseCase,
     private val getIndieGamesUseCase: GetIndieGamesUseCase

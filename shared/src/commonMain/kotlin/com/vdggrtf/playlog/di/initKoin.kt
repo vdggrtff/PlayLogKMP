@@ -10,6 +10,7 @@ fun initKoin(platformModule: Module) {
             networkModule,
             repositoryModule,
             domainModule,
+            presentationModule,
             platformModule // Сюда мы передадим платформенные штуки (например, создание файла Room)
         )
     }
