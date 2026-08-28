@@ -3,6 +3,7 @@ package com.vdggrtf.playlog.presentation.components.list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -136,58 +137,79 @@ fun GamesListTemplate(
             }
         }
 
-        LazyVerticalGrid(
-            state = gridState,
-            columns = GridCells.Fixed(gridColumns),
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 80.dp, top = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            if (headerContent != null) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    headerContent()
-                }
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            // 💥 МАГИЯ АДАПТИВНОСТИ:
+            // Если экран шире 600dp (Планшет или ПК), мы игнорируем ручной переключатель
+            // и говорим: "Вмести столько колонок шириной 160dp, сколько влезет!"
+            // Если это телефон - используем твой ручной gridColumns.
+            val isWideScreen = maxWidth > 600.dp
+            val adaptiveColumns = if (isWideScreen) {
+                GridCells.Adaptive(minSize = 160.dp)
+            } else {
+                GridCells.Fixed(gridColumns)
             }
 
-            if (filters.isNotEmpty()) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        contentPadding = PaddingValues(vertical = 8.dp)
-                    ) {
-                        items(filters) { filterName ->
-                            FilterChip(
-                                selected = selectedFilter == filterName,
-                                onClick = { onFilterClick(filterName) },
-                                label = { Text(filterName) },
-                                colors = FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = accentColor,
-                                    containerColor = CardBackground,
-                                    labelColor = Color.Gray,
-                                    selectedLabelColor = Color.White
-                                ),
-                                border = null
-                            )
+            LazyVerticalGrid(
+                state = gridState,
+                columns = adaptiveColumns,
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = 80.dp,
+                    top = 8.dp
+                ),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (headerContent != null) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        headerContent()
+                    }
+                }
+
+                if (filters.isNotEmpty()) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            contentPadding = PaddingValues(vertical = 8.dp)
+                        ) {
+                            items(filters) { filterName ->
+                                FilterChip(
+                                    selected = selectedFilter == filterName,
+                                    onClick = { onFilterClick(filterName) },
+                                    label = { Text(filterName) },
+                                    colors = FilterChipDefaults.filterChipColors(
+                                        selectedContainerColor = accentColor,
+                                        containerColor = CardBackground,
+                                        labelColor = Color.Gray,
+                                        selectedLabelColor = Color.White
+                                    ),
+                                    border = null
+                                )
+                            }
                         }
                     }
                 }
-            }
 
-            if (games.isEmpty() && !isLoading) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    emptyStateContent()
+                if (games.isEmpty() && !isLoading) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        emptyStateContent()
+                    }
+                } else {
+                    items(games) { game ->
+                        GameGridCard(
+                            game = game,
+                            gridColumns = gridColumns,
+                            onClick = { onGameClick(game.id.toString()) })
+                    }
                 }
-            } else {
-                items(games) { game ->
-                    GameGridCard(game = game, gridColumns = gridColumns, onClick = { onGameClick(game.id.toString()) })
-                }
-            }
 
-            if (isLoading && games.isNotEmpty()) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Box(Modifier.fillMaxWidth().padding(16.dp), Alignment.Center) {
-                        CircularProgressIndicator(color = accentColor)
+                if (isLoading && games.isNotEmpty()) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Box(Modifier.fillMaxWidth().padding(16.dp), Alignment.Center) {
+                            CircularProgressIndicator(color = accentColor)
+                        }
                     }
                 }
             }

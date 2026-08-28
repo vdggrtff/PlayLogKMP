@@ -2,6 +2,7 @@ package com.vdggrtf.playlog.presentation.main.achieve_hunting_screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -17,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -52,7 +55,8 @@ fun AchievementsRoute(
     val pyramidState = remember(state.games) {
 
         // 1. Filter out games that haven't been rated/verified yet
-        val completedGames = state.games.filter { it.verifiedDifficulty != AchievementDifficulty.NONE }
+        val completedGames =
+            state.games.filter { it.verifiedDifficulty != AchievementDifficulty.NONE }
 
         // 2. Group the remaining games by their difficulty
         // This creates a Map<Difficulty, List<Game>> for incredibly fast O(1) lookups in the UI
@@ -63,8 +67,10 @@ fun AchievementsRoute(
 
         // 4. Slice the Enum list into 3 rows to build a visual pyramid (3 -> 2 -> 1)
         val r1 = allDiffs.take(3)          // Top row: Takes the first 3 items (EASY, MEDIUM, HARD)
-        val r2 = allDiffs.drop(3).take(2)  // Middle row: Skips the first 3, takes the next 2 (DEMON, IMPOSSIBLE)
-        val r3 = allDiffs.drop(5)          // Bottom row: Skips the first 5, takes the rest (CUSTOM_CHALLENGE)
+        val r2 = allDiffs.drop(3)
+            .take(2)  // Middle row: Skips the first 3, takes the next 2 (DEMON, IMPOSSIBLE)
+        val r3 =
+            allDiffs.drop(5)          // Bottom row: Skips the first 5, takes the rest (CUSTOM_CHALLENGE)
 
         PyramidState(
             row1 = r1,
@@ -115,60 +121,71 @@ fun AchievementsScreen(
             modifier = Modifier.padding(bottom = 32.dp)
         )
 
-        // Top Row (3 card)
-        Row(
+        Box(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            contentAlignment = Alignment.Center
         ) {
-            row1.forEach { difficulty ->
-                DifficultySquareCard(
-                    difficulty = difficulty,
-                    count = gamesByDifficulty[difficulty]?.size ?: 0,
-                    modifier = Modifier.weight(1f),
-                    onClick = { onCategoryClick(difficulty.name) }
-                )
+            // А эта колонка НЕ РАСТЯНЕТСЯ больше чем на 600dp!
+            Column(
+                modifier = Modifier.widthIn(max = 600.dp)
+            ) {
+
+                // Top Row (3 card)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    row1.forEach { difficulty ->
+                        DifficultySquareCard(
+                            difficulty = difficulty,
+                            count = gamesByDifficulty[difficulty]?.size ?: 0,
+                            modifier = Modifier.weight(1f),
+                            onClick = { onCategoryClick(difficulty.name) }
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // medium row (2 card)
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Spacer(modifier = Modifier.weight(0.5f))
+                    DifficultySquareCard(
+                        difficulty = row2[0],
+                        count = gamesByDifficulty[row2[0]]?.size ?: 0,
+                        modifier = Modifier.weight(1f),
+                        onClick = { onCategoryClick(row2[0].name) }
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    DifficultySquareCard(
+                        difficulty = row2[1],
+                        count = gamesByDifficulty[row2[1]]?.size ?: 0,
+                        modifier = Modifier.weight(1f),
+                        onClick = { onCategoryClick(row2[1].name) }
+                    )
+                    Spacer(modifier = Modifier.weight(0.5f))
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // bottom row (1 card - custom challenge)
+                if (row3.isNotEmpty()) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        DifficultySquareCard(
+                            difficulty = row3[0],
+                            // FIXED: Replaced standard local games count with the actual completed bounties count from Supabase
+                            count = state.completedBountiesCount,
+                            modifier = Modifier.weight(1f),
+                            onClick = { onCategoryClick(row3[0].name) }
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(100.dp))
             }
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // medium row (2 card)
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Spacer(modifier = Modifier.weight(0.5f))
-            DifficultySquareCard(
-                difficulty = row2[0],
-                count = gamesByDifficulty[row2[0]]?.size ?: 0,
-                modifier = Modifier.weight(1f),
-                onClick = { onCategoryClick(row2[0].name) }
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            DifficultySquareCard(
-                difficulty = row2[1],
-                count = gamesByDifficulty[row2[1]]?.size ?: 0,
-                modifier = Modifier.weight(1f),
-                onClick = { onCategoryClick(row2[1].name) }
-            )
-            Spacer(modifier = Modifier.weight(0.5f))
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // bottom row (1 card - custom challenge)
-        if (row3.isNotEmpty()) {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Spacer(modifier = Modifier.weight(1f))
-                DifficultySquareCard(
-                    difficulty = row3[0],
-                    // FIXED: Replaced standard local games count with the actual completed bounties count from Supabase
-                    count = state.completedBountiesCount,
-                    modifier = Modifier.weight(1f),
-                    onClick = { onCategoryClick(row3[0].name) }
-                )
-                Spacer(modifier = Modifier.weight(1f))
-            }
-        }
-
-        Spacer(modifier = Modifier.height(100.dp))
     }
 }
 

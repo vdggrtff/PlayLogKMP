@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
@@ -108,17 +109,26 @@ fun ChallengeBoardScreen(
             if (state.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = Color(0xFF00E5FF))
             } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(state.challenges) { challenge ->
-                        BountyGridCard(
-                            challenge = challenge,
-                            onClick = { onChallengeClick(challenge.id) } // Simple click passes ID!
-                        )
+                BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                    // Для баунти карточек комфортная ширина ~280dp
+                    val adaptiveColumns = if (maxWidth > 600.dp) {
+                        GridCells.Adaptive(minSize = 280.dp)
+                    } else {
+                        GridCells.Fixed(2) // На телефоне контракты обычно идут в 1 колонку сверху вниз
+                    }
+
+                    LazyVerticalGrid(
+                        columns = adaptiveColumns,
+                        contentPadding = PaddingValues(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        items(state.challenges) { challenge ->
+                            BountyGridCard(
+                                challenge = challenge,
+                                onClick = { onChallengeClick(challenge.id) } // Simple click passes ID!
+                            )
+                        }
                     }
                 }
             }

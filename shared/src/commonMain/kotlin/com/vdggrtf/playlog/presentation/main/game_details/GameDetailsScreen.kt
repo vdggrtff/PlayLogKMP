@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -180,100 +182,108 @@ fun GameDetailsScreen(
             }
         }
     ) { paddingValues ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
-            contentPadding = PaddingValues(bottom = 100.dp)
+            contentAlignment = Alignment.TopCenter
         ) {
-            //  HEADER
-            item {
-                Box { // We wrap Header and Back Button in a Box inside the list!
-                    GameHeaderSection(gameState)
-
-                    // FIX 3: Back button is now INSIDE the scrollable list.
-                    // It will scroll up and disappear when user scrolls down to read text.
-                    IconButton(
-                        onClick = onBackClick,
-                        modifier = Modifier
-                            .padding(top = 40.dp, start = 16.dp) // Offset for status bar
-                            .background(Color.Black.copy(alpha = 0.5f), CircleShape)
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(string.back),
-                            tint = Color.White
-                        )
-                    }
-                }
-            }
-
-            item {
-                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    StoreLinksRow(
-                        gameName = game.name,
-                        cheapestPrice = gameState.cheapestPrice,
-                    )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    // Ai block
-                    ExpandableDifficultySection(
-                        aiDifficulty = gameState.objectiveDifficulty,
-                        userDifficulty = game.userDifficulty,
-                        isAiThinking = gameState.isAiThinking,
-                        isGameInLibrary = gameState.isSavedLibrary,
-                        currentGameStatus = gameState.currentGameStatus,
-                        onProveClick = onProveClick,
-                        onRetryClick = onRetryAiClick,
-                        communityDifficulty = gameState.communityDifficulty,
-                        communityVotesCount = gameState.communityVotesCount
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
-            }
-
-            //  TABS
-            item {
-                CyberTabs(
-                    selectedTabIndex = selectedTab,
-                    onTabSelected = { selectedTab = it },
-                    achievementsCount = gameState.achievements.size
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            // TAB content
-            if (selectedTab == 0) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .widthIn(max = 850.dp)
+                    .padding(horizontal = 16.dp),
+                contentPadding = PaddingValues(bottom = 100.dp)
+            ) {
+                //  HEADER
                 item {
-                    ExpandableDescription(
-                        text = game.descriptionRaw
-                            ?: stringResource(string.description_is_out)
-                    )
-                }
-            } else {
-                if (gameState.achievements.isEmpty()) {
-                    item {
-                        Box(
+                    Box { // We wrap Header and Back Button in a Box inside the list!
+                        GameHeaderSection(gameState)
+
+                        // FIX 3: Back button is now INSIDE the scrollable list.
+                        // It will scroll up and disappear when user scrolls down to read text.
+                        IconButton(
+                            onClick = onBackClick,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(32.dp),
-                            contentAlignment = Alignment.Center
+                                .padding(top = 40.dp, start = 16.dp) // Offset for status bar
+                                .background(Color.Black.copy(alpha = 0.5f), CircleShape)
                         ) {
-                            Text(stringResource(string.no_achievements), color = Color.Gray)
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(string.back),
+                                tint = Color.White
+                            )
                         }
                     }
-                } else {
-                    items(gameState.achievements) { ach -> AchievementRow(ach) }
                 }
-            }
 
-            if (gameState.customChallenges.isNotEmpty()) {
                 item {
-                    BountiesCarousel(challenges = gameState.customChallenges)
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        StoreLinksRow(
+                            gameName = game.name,
+                            cheapestPrice = gameState.cheapestPrice,
+                        )
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        // Ai block
+                        ExpandableDifficultySection(
+                            aiDifficulty = gameState.objectiveDifficulty,
+                            userDifficulty = game.userDifficulty,
+                            isAiThinking = gameState.isAiThinking,
+                            isGameInLibrary = gameState.isSavedLibrary,
+                            currentGameStatus = gameState.currentGameStatus,
+                            onProveClick = onProveClick,
+                            onRetryClick = onRetryAiClick,
+                            communityDifficulty = gameState.communityDifficulty,
+                            communityVotesCount = gameState.communityVotesCount
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
+                }
+
+                //  TABS
+                item {
+                    CyberTabs(
+                        selectedTabIndex = selectedTab,
+                        onTabSelected = { selectedTab = it },
+                        achievementsCount = gameState.achievements.size
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                // TAB content
+                if (selectedTab == 0) {
+                    item {
+                        ExpandableDescription(
+                            text = game.descriptionRaw
+                                ?: stringResource(string.description_is_out)
+                        )
+                    }
+                } else {
+                    if (gameState.achievements.isEmpty()) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(32.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(stringResource(string.no_achievements), color = Color.Gray)
+                            }
+                        }
+                    } else {
+                        items(gameState.achievements) { ach -> AchievementRow(ach) }
+                    }
+                }
+
+                if (gameState.customChallenges.isNotEmpty()) {
+                    item {
+                        BountiesCarousel(challenges = gameState.customChallenges)
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
                 }
             }
         }

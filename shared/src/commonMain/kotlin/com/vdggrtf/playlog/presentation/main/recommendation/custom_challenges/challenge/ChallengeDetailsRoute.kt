@@ -10,11 +10,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -159,10 +162,19 @@ fun ChallengeDetailsScreen(
             }
         }
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = paddingValues.calculateBottomPadding() + 40.dp)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            contentAlignment = Alignment.TopCenter // Прибиваем по центру сверху
         ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .widthIn(max = 700.dp) // 💥 МАКСИМАЛЬНАЯ ШИРИНА 700dp! Больше никакой "сосиски"!
+                    .padding(horizontal = 16.dp),
+                contentPadding = PaddingValues(bottom = 80.dp)
+            ) {
             // HEADER & POSTER (Scrolls away with the content)
             item {
                 Box(
@@ -233,6 +245,7 @@ fun ChallengeDetailsScreen(
                 )
             }
         }
+            }
         if (showBottomBar) {
             ChallengeManagementBottomSheet(
                 challenge = challenge,
