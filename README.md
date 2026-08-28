@@ -1,46 +1,48 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop (JVM).
+# 🎮 PlayLog KMP: The Multiplatform Hardcore Gaming Tracker
 
-* [/iosApp](./iosApp/iosApp) contains an iOS application. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+<p align="center">
+  <img src="https://img.shields.io/badge/Kotlin_Multiplatform-Ready-7F52FF?style=for-the-badge&logo=kotlin"/>
+  <img src="https://img.shields.io/badge/Compose_Multiplatform-Android_%7C_Desktop_%7C_iOS-4285F4?style=for-the-badge&logo=jetpackcompose"/>
+  <img src="https://img.shields.io/badge/Architecture-Clean_%7C_MVI-success?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Koin-4.0-brightgreen?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Ktor-3.0-blue?style=for-the-badge"/>
+</p>
 
-* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./shared/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./shared/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./shared/src/jvmMain/kotlin)
-    folder is the appropriate location.
-
-### Running the apps
-
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
-
-- Android app: `./gradlew :androidApp:assembleDebug`
-- Desktop app:
-  - Hot reload: `./gradlew :desktopApp:hotRun --auto`
-  - Standard run: `./gradlew :desktopApp:run`
-- Web app:
-  - Wasm target (faster, modern browsers): `./gradlew :webApp:wasmJsBrowserDevelopmentRun`
-  - JS target (slower, supports older browsers): `./gradlew :webApp:jsBrowserDevelopmentRun`
-- iOS app: open the [/iosApp](./iosApp) directory in Xcode and run it from there.
-
-### Running tests
-
-Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
-
-- Android tests: `./gradlew :shared:testAndroidHostTest`
-- Desktop tests: `./gradlew :shared:jvmTest`
-- Web tests:
-  - Wasm target: `./gradlew :shared:wasmJsTest`
-  - JS target: `./gradlew :shared:jsTest`
-- iOS tests: `./gradlew :shared:iosSimulatorArm64Test`
+PlayLog is an open-source, hardcore gaming meta-tracker rebuilt from the ground up using **Kotlin Multiplatform (KMP)** and **Compose Multiplatform (CMP)**. It unifies PC, Console, and Retro gaming ecosystems into a single client running natively across **Android** and **Desktop (Linux / Windows / macOS)**, with shared business logic ready for **iOS**.
 
 ---
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+## 🚀 Key Highlights & Architecture
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+* **🌍 90%+ Code Sharing:** Domain models, UseCases, Repositories, Ktor networking, Room KMP database, and Compose Multiplatform UI all reside in `shared/src/commonMain`.
+* **🌐 Enterprise Multi-API Aggregator:**
+  * **IGDB (Twitch/Amazon):** High-speed metadata and 1080p cover art queried via *Apicalypse* language on Ktor.
+  * **RetroAchievements API:** Automatic fallback for retro console achievements (NES, SNES, Genesis, PS1, MS-DOS).
+  * **CheapShark API:** Real-time game deal tracker for GOG and Humble Store.
+* **🤖 Google Gemini AI Core:** Platform-agnostic REST integration via Ktor to evaluate game completion difficulty and perform OCR/anti-cheat validation on submitted proof screenshots.
+* **📂 User-Generated Playlists (UGC):** Local-first database management powered by Room KMP and Supabase PostgreSQL sync.
+* **🎛️ Responsive Cyberpunk UI:** Custom adaptive grid layouts (`GridCells.Adaptive`), full-screen marketplace filter dialogs, and dynamic neon score badges.
+
+---
+
+## 🛠 Tech Stack (100% Multiplatform)
+
+| Layer | Technology |
+| :--- | :--- |
+| **UI Framework** | Compose Multiplatform (Material 3, Adaptive Layouts, Canvas) |
+| **Architecture** | Clean Architecture (Domain, Data, Presentation) + MVI StateFlow |
+| **Dependency Injection** | Koin 4.0 (KMP-native DSL, `koinViewModel`) |
+| **Networking** | Ktor 3.0 Client (ContentNegotiation, Kotlinx.Serialization) |
+| **Local Storage** | AndroidX Room KMP (with `androidx.sqlite.driver.bundled`) |
+| **Key-Value Storage** | AndroidX Multiplatform DataStore Preferences |
+| **Cloud & Auth** | Supabase KMP (PostgreSQL, GoTrue/Auth, RLS) |
+| **Image Loading** | Coil 3 Multiplatform (Ktor Engine) |
+| **Date / Time** | Kotlinx-datetime |
+
+---
+
+## 🖥️ Running the Project
+
+### Desktop (Linux / Windows / macOS)
+```bash
+./gradlew :desktopApp:run
