@@ -46,3 +46,6 @@ PlayLog is an open-source, hardcore gaming meta-tracker rebuilt from the ground 
 ### Desktop (Linux / Windows / macOS)
 ```bash
 ./gradlew :desktopApp:run
+
+### Android
+./gradlew :androidApp:assembleDebug
